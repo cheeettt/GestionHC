@@ -7,7 +7,7 @@ Danna
 
 */
 #include <iostream>
-#include <stdalign.h>
+#include <queue>
 #include <queue>
 
 using namespace std;
@@ -95,9 +95,9 @@ void mostrarArbol(arbolbinario arbol, int a)
     mostrarArbol(arbol->der, a + 1);
 
     for (int i = 0; i < a; i++)
-        cout << "*  *";
-    numNodos++;
+        cout << "   ";
     cout << arbol->dato << endl;
+    mostrarArbol(arbol->izq, a + 1);
 }
 
 void recorridoBFS(arbolbinario arbol)
@@ -110,7 +110,7 @@ void recorridoBFS(arbolbinario arbol)
 
     queue<arbolbinario> cola;
     cola.push(arbol);
-    cout << "Recorrido BFS";
+    cout << "Recorrido BFS: ";
 
     while (!cola.empty())
     {
@@ -118,9 +118,9 @@ void recorridoBFS(arbolbinario arbol)
         cola.pop();
 
         cout << actual->dato << " ";
-        if (actual->izq == NULL)
+        if (actual->izq != NULL)
             cola.push(actual->izq);
-        if (actual->der == NULL)
+        if (actual->der != NULL)
             cola.push(actual->der);
     }
     cout << endl;
@@ -129,7 +129,7 @@ void recorridoBFS(arbolbinario arbol)
 void recorridoDFS(arbolbinario arbol)
 {
     if (arbol != NULL){
-        cout << arbol->dato << "";
+        cout << arbol->dato << " ";
     recorridoDFS(arbol->izq);
     recorridoDFS(arbol->der);
     }
@@ -147,7 +147,7 @@ bool buscarDFS(arbolbinario arbol, int valor)
 
     if (buscarDFS(arbol->izq, valor))
         return true;
-    if (buscarDFS(arbol->izq, valor))
+    if (buscarDFS(arbol->der, valor))
         return true;
 
     return false;
@@ -170,7 +170,7 @@ void menu2()
 {
     cout << "\t 1.Recorrido BFS\n";
     cout << "\t 2.Recorrido DFS\n";
-    cout << "\n\t  Elige una opcion valida";
+    cout << "\n\t  Elige una opcion valida: ";
 }
 
 int main()
@@ -209,7 +209,7 @@ int main()
                     recorridoDFS(arbol);
                     break;
                 default:
-                    cout << "\n\t ingresa una opcion valida";
+                    cout << "\n\t ingresa una opcion valida: ";
                 }
             }
             else
@@ -219,12 +219,12 @@ int main()
             break;
 
         case 4:
-            cout << "Ingresa el valor a eliminar:";
+            cout << "Ingresa el valor a eliminar: ";
             cin >> a;
             arbol = eliminar(arbol, a);
             break;
         case 5:
-            cout << "ingrese el valor a buscar:";
+            cout << "ingrese el valor a buscar: ";
             cin >> a;
 
             if (!buscarDFS(arbol, a))
