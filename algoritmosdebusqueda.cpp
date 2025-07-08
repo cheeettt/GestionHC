@@ -1,3 +1,4 @@
+
 /*codigo de recorrido DFS Y BSF
 PROGRAMACION DE UN ARBOL Y SUS RECORRIDOS
 
@@ -135,24 +136,46 @@ void recorridoDFS(arbolbinario arbol)
     }
 }
 
-bool buscarDFS(arbolbinario arbol, int valor)
+bool buscarDFS(arbolbinario arbol, int valor, int &visitados)
 {
     if (arbol == NULL)
         return false;
+    visitados++;
     if (arbol->dato == valor)
     {
-        cout << "\n\t valor encontrado:" << valor << endl;
+        cout << "\n\t valor encontrado (DFS):" << valor << endl;
         return true;
     }
 
-    if (buscarDFS(arbol->izq, valor))
+    if (buscarDFS(arbol->izq, valor, visitados))
         return true;
-    if (buscarDFS(arbol->der, valor))
+    if (buscarDFS(arbol->der, valor, visitados))
         return true;
 
     return false;
 }
 
+// Búsqueda BFS en el árbol binario
+bool buscarBFS(arbolbinario arbol, int valor, int &visitados) {
+    if (arbol == NULL)
+        return false;
+    queue<arbolbinario> cola;
+    cola.push(arbol);
+    while (!cola.empty()) {
+        arbolbinario actual = cola.front();
+        cola.pop();
+        visitados++;
+        if (actual->dato == valor) {
+            cout << "\n\t valor encontrado (BFS): " << valor << endl;
+            return true;
+        }
+        if (actual->izq != NULL)
+            cola.push(actual->izq);
+        if (actual->der != NULL)
+            cola.push(actual->der);
+    }
+    return false;
+}
 void menu()
 {
     system("cls");
@@ -162,7 +185,8 @@ void menu()
     cout << "\t 3.Seleccionar recorrido\n";
     cout << "\t 4.Eliminar recorrido\n";
     cout << "\t 5.Buscar dato por DFS \n";
-    cout << "\t 6.Salir de la aplicacion\n";
+    cout << "\t 6.Buscar dato por BFS \n";
+    cout << "\t 7.Salir de la aplicacion\n";
     cout << "\n\t Elige una opcion valida:";
 }
 
@@ -177,7 +201,7 @@ int main()
 {
     arbolbinario arbol = NULL;
     int a, op, op2;
-    system("color f0");
+    //system("color f0");
 
     do
     {
@@ -223,22 +247,31 @@ int main()
             cin >> a;
             arbol = eliminar(arbol, a);
             break;
-        case 5:
-            cout << "ingrese el valor a buscar: ";
+        case 5: {
+            cout << "ingrese el valor a buscar (DFS): ";
             cin >> a;
-
-            if (!buscarDFS(arbol, a))
-            {
+            int visitados = 0;
+            if (!buscarDFS(arbol, a, visitados))
                 cout << "\n\t valor no encontrado en el arbol";
-            }
+            cout << "\n\t Nodos visitados en DFS: " << visitados << endl;
             break;
-        case 6:
+        }
+        case 6: {
+            cout << "ingrese el valor a buscar (BFS): ";
+            cin >> a;
+            int visitados = 0;
+            if (!buscarBFS(arbol, a, visitados))
+                cout << "\n\t valor no encontrado en el arbol";
+            cout << "\n\t Nodos visitados en BFS: " << visitados << endl;
+            break;
+        }
+        case 7:
             exit(0);
         default:
             cout <<"\t ingrese una opcion correcta";
         }
         cout <<"\n\n\n";
         system("pause");
-    }while (op != 6);
+    }while (op != 7);
     
 }
